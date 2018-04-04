@@ -227,7 +227,7 @@ function radar_visualization(config) {
       .style("fill", "none")
       .style("stroke", config.colors.grid)
       .style("stroke-width", 1);
-    if (config.print_layout) {
+    if (config.print_layout || config.show_legend) {
       grid.append("text")
         .text(config.rings[i].name)
         .attr("y", -rings[i].radius + 62)
@@ -254,7 +254,7 @@ function radar_visualization(config) {
   }
 
   // draw title and legend (only in print layout)
-  if (config.print_layout) {
+  if (config.print_layout || config.show_legend) {
 
     // title
     radar.append("text")
@@ -289,9 +289,12 @@ function radar_visualization(config) {
           .style("font-family", "Arial, Helvetica")
           .style("font-size", "12")
           .style("font-weight", "bold");
+
         legend.selectAll(".legend" + quadrant + ring)
           .data(segmented[quadrant][ring])
           .enter()
+            .append("a")
+              .attr("xlink:href", function(d, i) { return (config.show_legend && d.hasOwnProperty("link")) && d.link || 'javascript:void(0);'; }) // sorry
             .append("text")
               .attr("class", "legend" + quadrant + ring)
               .attr("transform", function(d, i) { return legend_transform(quadrant, ring, i); })
@@ -386,7 +389,7 @@ function radar_visualization(config) {
 
     // blip text
     if (d.active || config.print_layout) {
-      var blip_text = config.print_layout ? d.id : d.label.match(/[a-z]/i);
+      var blip_text = (config.print_layout || config.show_legend) ? d.id : d.label.match(/[a-z]/i);
       blip.append("text")
         .text(blip_text)
         .attr("y", 3)
