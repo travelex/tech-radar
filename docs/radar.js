@@ -299,6 +299,7 @@ function radar_visualization(config) {
               .attr("class", "legend" + quadrant + ring)
               .attr("transform", function(d, i) { return legend_transform(quadrant, ring, i); })
               .text(function(d, i) { return d.id + ". " + d.label; })
+              .style("text-decoration", function(d, i) { return (config.show_legend && d.hasOwnProperty("link")) && 'underline' || 'none'; })
               .style("font-family", "Arial, Helvetica")
               .style("font-size", "11");
       }
